@@ -1,13 +1,5 @@
-//
-//  RunOnceTests.swift
-//  RunOnceTests
-//
-//  Created by Sarris, Aris, Vodafone Greece on 20/01/2021.
-//  Copyright © 2021 Sarris, Aris, Vodafone Greece. All rights reserved.
-//
-
 import XCTest
-@testable import RunOnce
+@testable import ExecuteOnly
 
 class MockStorage: ExecuteOnlyStorage {
 
