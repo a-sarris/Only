@@ -27,7 +27,7 @@ jobs:
 
       # Runs a single command using the runners shell
       - name: Run unit tests
-        run: xcodebuild -project RunOnce.xcodeproj -scheme RunOnce -sdk iphonesimulator -destination 'platform=iOS Simulator,name=iPhone 11,OS=14.3' test
+        run: swift test
 
       # Runs a set of commands using the runners shell
 #       - name: Run a multi-line script
