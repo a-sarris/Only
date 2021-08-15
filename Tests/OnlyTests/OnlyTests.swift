@@ -1,6 +1,10 @@
 import XCTest
 @testable import Only
 
+enum Key: String, CaseIterable {
+    case key
+}
+
 class MockStorage: OnlyStorage {
 
     enum Action: Equatable {
@@ -56,12 +60,12 @@ class RunOnceTests: XCTestCase {
         // When
 
         Only(persistentStorage: mockStorage,
-             frequency: .once(Keys.key)) {
+             frequency: .once(Key.key)) {
             timesRun += 1
         }
 
         Only(persistentStorage: mockStorage,
-             frequency: .once(Keys.key)) {
+             frequency: .once(Key.key)) {
             timesRun += 1
         }
 
@@ -80,14 +84,14 @@ class RunOnceTests: XCTestCase {
         Only(with: "aris",
              persistentStorage: mockStorage,
              sessionStorage: mockSessionStorage,
-             frequency: .once(Keys.key)) {
+             frequency: .once(Key.key)) {
             timesRun += 1
         }
 
         Only(with: "aris",
              persistentStorage: mockStorage,
              sessionStorage: mockSessionStorage,
-             frequency: .once(Keys.key)) {
+             frequency: .once(Key.key)) {
             timesRun += 1
         }
 
@@ -105,14 +109,14 @@ class RunOnceTests: XCTestCase {
         var timesRun = 0
         // When
 
-        Only<Keys>(with: "aris",
+        Only<Key>(with: "aris",
                    persistentStorage: mockStorage,
                    sessionStorage: mockSessionStorage,
                    frequency: .`if`({true})) {
             timesRun += 2
         }
 
-        Only<Keys>(with: "aris",
+        Only<Key>(with: "aris",
                    persistentStorage: mockStorage,
                    sessionStorage: mockSessionStorage,
                    frequency: .`if`({false})) {
@@ -132,10 +136,10 @@ class RunOnceTests: XCTestCase {
         mockStorage.responses = [Date(), Date()]
         // When
 
-        Only<Keys>(with: "aris",
+        Only<Key>(with: "aris",
                    persistentStorage: mockStorage,
                    sessionStorage: mockSessionStorage,
-                   frequency: .ifTimePassed(Keys.key, .seconds(1))) {
+                   frequency: .ifTimePassed(Key.key, .seconds(1))) {
             timesRun += 1
         }
 
@@ -160,30 +164,30 @@ class RunOnceTests: XCTestCase {
         mockStorage.responses = [nil, mockDate, mockDate]
         // When
 
-        Only<Keys>(with: "aris",
+        Only<Key>(with: "aris",
                    persistentStorage: mockStorage,
                    sessionStorage: mockSessionStorage,
-                   frequency: .ifTimePassed(Keys.key, interval),
+                   frequency: .ifTimePassed(Key.key, interval),
                    currentDateProvider: {mockDate}) {
             timesRun += 1
         }
 
         let mockDate1 = mockDate.advanced(by: 0.95)
 
-        Only<Keys>(with: "aris",
+        Only<Key>(with: "aris",
                    persistentStorage: mockStorage,
                    sessionStorage: mockSessionStorage,
-                   frequency: .ifTimePassed(Keys.key, interval),
+                   frequency: .ifTimePassed(Key.key, interval),
                    currentDateProvider: {mockDate1}) {
             timesRun += 1
         }
 
         let mockDate2 = mockDate.advanced(by: 1.01)
 
-        Only<Keys>(with: "aris",
+        Only<Key>(with: "aris",
                    persistentStorage: mockStorage,
                    sessionStorage: mockSessionStorage,
-                   frequency: .ifTimePassed(Keys.key, interval),
+                   frequency: .ifTimePassed(Key.key, interval),
                    currentDateProvider: {mockDate2}) {
             timesRun += 1
         }
@@ -207,13 +211,13 @@ class RunOnceTests: XCTestCase {
 
         Only(persistentStorage: mockStorage,
              sessionStorage: mockSessionStorage,
-             frequency: .oncePerSession(Keys.key)) {
+             frequency: .oncePerSession(Key.key)) {
             timesRun += 1
         }
 
         Only(persistentStorage: mockStorage,
              sessionStorage: mockSessionStorage,
-             frequency: .oncePerSession(Keys.key)) {
+             frequency: .oncePerSession(Key.key)) {
             timesRun += 1
         }
 
@@ -235,31 +239,31 @@ class RunOnceTests: XCTestCase {
 
         Only(persistentStorage: mockStorage,
              sessionStorage: mockSessionStorage,
-             frequency: .every(Keys.key, times: every)) {
+             frequency: .every(Key.key, times: every)) {
             timesRun += 1
         }
 
         Only(persistentStorage: mockStorage,
              sessionStorage: mockSessionStorage,
-             frequency: .every(Keys.key, times: every)) {
+             frequency: .every(Key.key, times: every)) {
             timesRun += 1
         }
 
         Only(persistentStorage: mockStorage,
              sessionStorage: mockSessionStorage,
-             frequency: .every(Keys.key, times: every)) {
+             frequency: .every(Key.key, times: every)) {
             timesRun += 1
         }
 
         Only(persistentStorage: mockStorage,
              sessionStorage: mockSessionStorage,
-             frequency: .every(Keys.key, times: every)) {
+             frequency: .every(Key.key, times: every)) {
             timesRun += 1
         }
 
         Only(persistentStorage: mockStorage,
              sessionStorage: mockSessionStorage,
-             frequency: .every(Keys.key, times: every)) {
+             frequency: .every(Key.key, times: every)) {
             timesRun += 1
         }
 

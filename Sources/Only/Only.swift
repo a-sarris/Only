@@ -8,11 +8,6 @@
 
 import Foundation
 
-enum Keys: String, OnlyKey {
-    case key
-}
-
-
 private let defaultProfile: String = "com.execute.only"
 class Only<T: OnlyKey> where T.RawValue == String {
 
