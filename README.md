@@ -1,7 +1,7 @@
 [![Run unit tests](https://github.com/a-sarris/Only/actions/workflows/main.yml/badge.svg)](https://github.com/a-sarris/Only/actions/workflows/main.yml)
 # Only
 
-Throttler implementation as an SPM Package that runs a closure only if specific conditions are met.
+A Swift throttler that runs a closure only if specific conditions are met.
 
 ## Sample Usage
 
