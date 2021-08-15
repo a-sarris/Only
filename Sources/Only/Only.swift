@@ -1,5 +1,5 @@
 //
-//  ExecuteOnly.swift
+//  Only.swift
 //  RunOnce
 //
 //  Created by Sarris, Aris on 05/02/2021.
@@ -8,48 +8,45 @@
 
 import Foundation
 
-enum Keys: String, ExecuteOnlyKey {
+enum Keys: String, OnlyKey {
     case key
 }
 
-typealias ExecuteOnlyKey = RawRepresentable & CaseIterable
 
-enum Frequency<T: ExecuteOnlyKey> where T.RawValue == String {
-    case once(T)
-    case oncePerSession(T)
-    case ifTimePassed(T, DispatchTimeInterval)
-    case `if`(() -> Bool)
-    case every(T, times: Int)
-}
+private let defaultProfile: String = "com.execute.only"
+class Only<T: OnlyKey> where T.RawValue == String {
 
-class ExecuteOnly<T: ExecuteOnlyKey> where T.RawValue == String {
-
-    private var persistentStorage: ExecuteOnlyStorage1
-    private var sessionStorage: ExecuteOnlyStorage1
+    private var persistentStorage: OnlyStorage
+    private var sessionStorage: OnlyStorage
     private let dateProvider: () -> Date
     private let profile: String
 
     @discardableResult
-    convenience init(_ profile: String = "com.executeOnly",
-         _ frequency: Frequency<T>,
-         _ block: ()->()) {
+    convenience init(_ frequency: OnlyFrequency<T>,
+                     _ block: ()->()) {
+
+        self.init(with: defaultProfile, frequency: frequency, block: block)
+    }
+
+    @discardableResult
+    convenience init(_ profile: String = defaultProfile,
+                     _ frequency: OnlyFrequency<T>,
+                     _ block: ()->()) {
 
         self.init(with: profile, frequency: frequency, block: block)
     }
 
     @discardableResult
-    required init(with profile: String = "com.executeOnly",
-         persistentStorage: ExecuteOnlyStorage1 = UserDefaults.standard,
-         sessionStorage: ExecuteOnlyStorage1 = SessionStorage1(),
-         frequency: Frequency<T>,
+    required init(with profile: String = defaultProfile,
+         persistentStorage: OnlyStorage = UserDefaults.standard,
+         sessionStorage: OnlyStorage = OnlySessionStorage(),
+         frequency: OnlyFrequency<T>,
          currentDateProvider: @escaping () -> Date = { Date() },
          block: () -> ()) {
         self.dateProvider = currentDateProvider
         self.persistentStorage = persistentStorage
         self.sessionStorage = sessionStorage
         self.profile = profile
-        //let keys = T.allCases.map{ T.name() + $0.rawValue }
-        //let storedKeys = storage.get(profile) ?? ExecuteOnlyModel()
         var didRun = false
         if self.shouldExecute(frequency) {
             block()
@@ -58,7 +55,7 @@ class ExecuteOnly<T: ExecuteOnlyKey> where T.RawValue == String {
         updateKeysIfNeeded(frequency, didExecute: didRun)
     }
 
-    private func shouldExecute(_ frequency: Frequency<T>) -> Bool {
+    private func shouldExecute(_ frequency: OnlyFrequency<T>) -> Bool {
         switch frequency {
         case .once(let key):
             return persistentStorage.getInt(compositeKey(key)) == nil
@@ -75,7 +72,7 @@ class ExecuteOnly<T: ExecuteOnlyKey> where T.RawValue == String {
         }
     }
 
-    private func updateKeysIfNeeded (_ frequency: Frequency<T>, didExecute: Bool) {
+    private func updateKeysIfNeeded (_ frequency: OnlyFrequency<T>, didExecute: Bool) {
         switch (frequency, didExecute) {
         case (.once, false), (.ifTimePassed, false), (.if, false), (.oncePerSession, false):
             break
@@ -92,12 +89,11 @@ class ExecuteOnly<T: ExecuteOnlyKey> where T.RawValue == String {
         }
     }
 
-    private func updateKeys(_ frequency: Frequency<T>) {
+    private func updateKeys(_ frequency: OnlyFrequency<T>) {
         switch frequency {
         case .once(let key):
             persistentStorage.set(1, compositeKey(key))
         case .ifTimePassed(let key, _):
-            debugPrint("setting: \(dateProvider().timeIntervalSince1970)")
             persistentStorage.set(dateProvider(), compositeKey(key))
         case .if(_): break
         case .oncePerSession(let key):

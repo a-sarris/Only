@@ -10,14 +10,14 @@ import Foundation
 
 
 
-protocol ExecuteOnlyStorage1 {
+protocol OnlyStorage {
     mutating func set(_ value: Int, _ key: String)
     mutating func set(_ date: Date, _ key: String)
     func getInt(_ key: String) -> Int?
     func getDate(_ key: String) -> Date?
 }
 
-extension UserDefaults: ExecuteOnlyStorage1 {
+extension UserDefaults: OnlyStorage {
     func getDate(_ key: String) -> Date? {
         if let interval = value(forKey: key) as? TimeInterval {
             return Date(timeIntervalSince1970: interval)
@@ -39,7 +39,7 @@ extension UserDefaults: ExecuteOnlyStorage1 {
 }
 
 
-struct SessionStorage1: ExecuteOnlyStorage1 {
+struct OnlySessionStorage: OnlyStorage {
 
     var backingStore = [String: Any]()
 
