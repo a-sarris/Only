@@ -8,7 +8,7 @@
 
 import Foundation
 
-public  let defaultProfile: String = "com.execute.only"
+public  let OnlyDefaultProfile: String = "com.execute.only"
 public class Only<T: OnlyKey> where T.RawValue == String {
 
     private var persistentStorage: OnlyStorage
@@ -20,11 +20,11 @@ public class Only<T: OnlyKey> where T.RawValue == String {
     public convenience init(_ frequency: OnlyFrequency<T>,
                      _ block: ()->()) {
 
-        self.init(with: defaultProfile, frequency: frequency, block: block)
+        self.init(with: OnlyDefaultProfile, frequency: frequency, block: block)
     }
 
     @discardableResult
-    public convenience init(_ profile: String = defaultProfile,
+    public convenience init(_ profile: String = OnlyDefaultProfile,
                      _ frequency: OnlyFrequency<T>,
                      _ block: ()->()) {
 
@@ -32,7 +32,7 @@ public class Only<T: OnlyKey> where T.RawValue == String {
     }
 
     @discardableResult
-    public required init(with profile: String = defaultProfile,
+    public required init(with profile: String = OnlyDefaultProfile,
          persistentStorage: OnlyStorage = UserDefaults.standard,
          sessionStorage: OnlyStorage = OnlySessionStorage(),
          frequency: OnlyFrequency<T>,
