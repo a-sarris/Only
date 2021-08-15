@@ -10,7 +10,7 @@ import Foundation
 
 
 
-protocol OnlyStorage {
+public protocol OnlyStorage {
     mutating func set(_ value: Int, _ key: String)
     mutating func set(_ date: Date, _ key: String)
     func getInt(_ key: String) -> Int?
@@ -18,44 +18,47 @@ protocol OnlyStorage {
 }
 
 extension UserDefaults: OnlyStorage {
-    func getDate(_ key: String) -> Date? {
+    public func getDate(_ key: String) -> Date? {
         if let interval = value(forKey: key) as? TimeInterval {
             return Date(timeIntervalSince1970: interval)
         }
         return nil
     }
 
-    func getInt(_ key: String) -> Int? {
+    public func getInt(_ key: String) -> Int? {
         value(forKey: key) as? Int
     }
 
-    func set(_ value: Int, _ key: String) {
+    public func set(_ value: Int, _ key: String) {
         set(value, forKey: key)
     }
 
-    func set(_ date: Date, _ key: String) {
+    public func set(_ date: Date, _ key: String) {
         set(date.timeIntervalSince1970, forKey: key)
     }
 }
 
 
-struct OnlySessionStorage: OnlyStorage {
+public struct OnlySessionStorage: OnlyStorage {
 
     var backingStore = [String: Any]()
 
-    mutating func set(_ value: Int, _ key: String) {
+
+    public init() {}
+
+    public mutating func set(_ value: Int, _ key: String) {
         backingStore[key] = value
     }
 
-    mutating func set(_ date: Date, _ key: String) {
+    public mutating func set(_ date: Date, _ key: String) {
         backingStore[key] = date
     }
 
-    func getInt(_ key: String) -> Int? {
+    public func getInt(_ key: String) -> Int? {
         backingStore[key] as? Int
     }
 
-    func getDate(_ key: String) -> Date? {
+    public func getDate(_ key: String) -> Date? {
         backingStore[key] as? Date
     }
 }

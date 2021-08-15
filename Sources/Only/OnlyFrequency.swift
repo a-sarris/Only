@@ -7,9 +7,9 @@
 
 import Foundation
 
-typealias OnlyKey = RawRepresentable & CaseIterable
+public typealias OnlyKey = RawRepresentable & CaseIterable
 
-enum OnlyFrequency<T: OnlyKey> where T.RawValue == String {
+public enum OnlyFrequency<T: OnlyKey> where T.RawValue == String {
     case once(T)
     case oncePerSession(T)
     case ifTimePassed(T, DispatchTimeInterval)
