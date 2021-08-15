@@ -24,6 +24,13 @@ Only(.once(Key.showTutorial)) { [weak self] in
 
 The default backing storage is `UserDefaults.standard`.
 
+To reset the storage for a key, simply remove the record.
+For `UserDefaults.standard`:
+
+```
+UserDefaults.standard.removeObject(forKey: "\(com.execute.only).\(Key.showTutorial)")
+```
+
 ### Available options are described by `OnlyFrequency`:
 ```
 enum OnlyFrequency<T: OnlyKey> where T.RawValue == String {
